@@ -1,0 +1,23 @@
+﻿@model Phones_And_People.Models.PersonViewModel
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model.People)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DoB)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
