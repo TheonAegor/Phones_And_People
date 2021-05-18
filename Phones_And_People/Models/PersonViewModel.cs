@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Phones_And_People.Models
 {
@@ -9,6 +10,8 @@ namespace Phones_And_People.Models
     {
         public PageInfo PageInfo { get; set; }
         public IEnumerable<Person> People { get; set; }
+        public DateViewModel DateViewModel { get; set; }
+        
 
     }
 
@@ -22,4 +25,10 @@ namespace Phones_And_People.Models
         }
     }
 
+    public class DateViewModel
+    {
+        public SelectList Years { get; set; }
+        public SelectList Months { get; set; }
+        public SelectList Days { get; set; }
+    }
 }

@@ -12,7 +12,7 @@ using Phones_And_People.Models;
 namespace Phones_And_People.Models
 {
     
-    public class PersonInitializer : DropCreateDatabaseAlways<PersonContext>
+    public class PersonInitializer : DropCreateDatabaseIfModelChanges<PersonContext>
     {
         protected override void Seed(PersonContext context)
         {

@@ -21,3 +21,57 @@
         }
     </tbody>
 </table>
+<ul class="pagination">
+    <li><button id="btn-previous" class="btn"><<</button></li>
+    <li><button id="btn-first" class="btn">1</button></li>
+    <li><button id="btn-this" class="btn btn-primary">@Model.PageInfo.Page</button></li>
+    <li><button id="btn-last" class="btn">@Model.PageInfo.TotalPages</button></li>
+    <li><button id="btn-next" class="btn">>></button></li>
+</ul>
+<script type="text/javascript">
+    $(document).ready(function () {
+        alert($("#btn-this").html());
+        $(".pagination").show();
+        if ($("#btn-this").html() == 1) {
+            $("#btn-first").hide();
+            $("#btn-previous").hide();
+        }
+        else if ($("#btn-this").html() == $("#btn-last").html()) {
+            $("btn-next").hide();
+        }
+        $(".pagination").click(function (event) {
+            changePage(event);
+            //event.target.innerText;
+        });
+    });
+    function changePage(event) {
+        var page = event.target.innerText;
+        var res = $("#btn-this").html();
+
+        if (page == '<<') {
+            //    alert("<<");
+            res *= 1;
+            res -= 1;
+        }
+        else if (page == ">>") {
+            //    alert(">>");
+            res *= 1;
+            res += 1;
+        }
+        else
+            res = page * 1;
+        alert(typeof (res));
+
+        $.ajax({
+            url: "NextPage",
+            method: "POST",
+            data: {
+                "page": res
+            },
+            success: function (result) {
+                alert("success");
+                $("tbody").html(result);
+            }
+        });
+    }
+</script>

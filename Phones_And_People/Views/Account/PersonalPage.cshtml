@@ -1,0 +1,97 @@
+﻿@model  Phones_And_People.Models.Person
+
+@{
+    ViewBag.Title = "PersonalPage";
+}
+
+<h2>PersonalPage</h2>
+
+<div>
+    <div class="modal-window">
+        <table class="table">
+            <tr>
+                <th>
+                    Photo
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DoB)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Password)
+                </th>
+                <th></th>
+            </tr>
+
+            <tr>
+                <td>
+                    <img id="personPhoto" class="photo-small" alt="picture" src=@Model.Picture>
+                    <img id="bigPersonPhoto" class="photo-big" alt="bigPicture" src=@Model.BigPicture>
+                    <div id="mask"></div>
+                </td>
+                <td>
+                    @Model.Title
+                </td>
+                <td>
+                    @Model.FirstName
+                </td>
+                <td>
+                    @Model.LastName
+                </td>
+                <td>
+                    @Model.DoB
+                </td>
+                <td>
+                    @Model.Phone
+                </td>
+                <td>
+                    @Model.Email
+                </td>
+                <td>
+                    @Model.Password
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var smallPic = document.getElementById("personPhoto");
+            var bigPic = document.getElementById("bigPersonPhoto");
+
+            smallPic.addEventListener("click", function () {
+                makeBig();
+            });
+            bigPic.addEventListener("click", closeBig);
+        });
+        function makeBig() {
+            var bigPic = document.getElementById("bigPersonPhoto");
+            var background = $("#mask");
+
+            background.show();
+            bigPic.style.visibility = "visible";
+        }
+        function closeBig() {
+            var bigPic = document.getElementById("bigPersonPhoto");
+            var background = $("#mask");
+
+            background.hide();
+            bigPic.style.visibility = "hidden";
+        }
+    </script>
+}

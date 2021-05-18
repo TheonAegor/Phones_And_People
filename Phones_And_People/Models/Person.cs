@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
@@ -18,8 +19,6 @@ namespace Phones_And_People.Models
         public string BigPicture { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-
-
     }
 
 }

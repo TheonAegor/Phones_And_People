@@ -1,122 +1,213 @@
-﻿@model Phones_And_People.Models.PersonViewModel
+﻿<body id="all">
 
-@{
-    ViewBag.Title = "Index";
-}
+    @model Phones_And_People.Models.PersonViewModel
+    @using Phones_And_People.Helpers
+    @{
+        ViewBag.Title2 = "Index";
+    }
 
-<div class="container">
+    <div class="container">
+        <div class="popup">
+        <button id="btn-search" type="button" class="my-btn btn-search">Поиск</button>
+        <div id="myPopup" class="popuptext">
+            @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+            {
+                <div><input type="hidden" value=@Model.PageInfo.Page.ToString() name="page" /></div>
+                <div class="txt">@Html.TextBox("SearchString", ViewBag.CurrentFilter as string)</div>
+                <div><input class="btn btn-success btn-sm my-btn" type="submit" value="Найти" /></div>
+            }
+        </div>
+        </div>
+    <div id="filter-field" class="popup">
+        <button id ="bt-filter-popup" type="button" class="my-btn btn-search">Фильтр</button>
+        <div class="popuptext">
+            <form method="get">
+                <label class="control-label"> Год</label>
+                @Html.DropDownList("y", Model.DateViewModel.Years as SelectList, "Любой",
+                        htmlAttributes: new { @class = "form-control" })
+                <label class="control-label">Месяц</label>
+                @Html.DropDownList("m", Model.DateViewModel.Months as SelectList, "Любой",
+                        htmlAttributes: new { @class = "form-control" })
+                <label class="control-label">День</label>
+                @Html.DropDownList("d", Model.DateViewModel.Days as SelectList, "Любой",
+                        htmlAttributes: new { @class = "form-control" })
+                <input type="submit" value="Фильтр" class="btn btn-success   my-btn" />
+            </form>
+        </div>
+    </div>
     <div class="row">
-        <div class="col-md-6">
-            <h3>Список контактов</h3>
-        </div>
-        <div class="col-md-6">
-            <button id="btn-search" type="button" class="btn btn-group btn-lg pull-left">Поиск</button>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>
-                        <i class="fas fa-angle-down btn btn-default"></i>
-                        Title
-                    </th>
-                    <th>
-                        <i class="fas fa-angle-down btn btn-default"></i>
-                        Name
-                    </th>
-                    <th>
-                        <i class="fas fa-angle-down btn btn-default"></i>
-                        Last Name
-                    </th>
-                    <th>
-                        <i class="fas fa-angle-down btn btn-default"></i>
-                        Date
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            @*<div id="update_panel">@RenderPartial("nextPage", Model)</div>*@
-            <tbody>
-                @foreach (var item in Model.People)
-                {
+        <div class="col-md-12">
+            <table class="table table-hover">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Title)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FirstName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LastName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DoB)
-                        </td>
+                        <th>
+                            Фото
+                        </th>
+                        <th>
+                            <i id="i-title" class="i fas fa-angle-down btn btn-default"></i>
+                            Префикс
+                        </th>
+                        <th>
+                            <i id="i-fname" class="i fas fa-angle-down btn btn-default"></i>
+                            Имя
+                        </th>
+                        <th>
+                            <i id="i-lname" class="i fas fa-angle-down btn btn-default"></i>
+                            Фамилия
+                        </th>
+                        <th>
+                            <i id="i-date" class="i fas fa-angle-down btn btn-default"></i>
+                            Дата рождения
+                        </th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.People)
+                    {
+                        <tr>
+                            <td>
+                                <img class="picture" src=@item.Picture alt="Image" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DoB)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
-<ul class="pagination">
-    <li><button id="btn-previous" class="btn"><<</button></li>
-    <li><button id="btn-first" class="btn">1</button></li>
-    <li><button id="btn-this" class="btn btn-primary">@Model.PageInfo.Page</button></li>
-    <li><button id="btn-last" class="btn">@Model.PageInfo.TotalPages</button></li>
-    <li><button id="btn-next" class="btn">>></button></li>
-</ul>
-@section scripts 
+    <div class="btn-group">
+        @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { page = x,
+       CurrentFilter = ViewBag.CurrentFilter,
+       sortOrder = ViewBag.CurrentSort,
+       y = ViewBag.CurrYearFilt,
+       m = ViewBag.CurrMonthfilt,
+       d = ViewBag.CurrDayfilt
+   }))
+    </div>
+    @section scripts
     {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            alert($("#btn-this").html());
-            $(".pagination").show();
-            if ($("#btn-this").html() == 1) {
-                $("#btn-first").hide();
-                $("#btn-previous").hide();
-            }
-            else if ($("#btn-this").html() == $("#btn-last").html() ) {
-                $("btn-next").hide();
-            }
-            $(".pagination").click(function (event) {
-                changePage(event);
-                //event.target.innerText;
-            });
-        });
-        function changePage(event) {
-            var page = event.target.innerText;;
-            //var page1 = page.toString();
-            //alert(page1);
-            alert("page = " + page);
-            var res = $("#btn-this").html();
+            <script type="text/javascript">
+    $(document).ready(function () {
+            //alert("hi");
+        var searchPopup = document.querySelectorAll(".btn-search");
+        var searchSubmit = document.getElementById("srch-submit");
+        var buttons = document.querySelectorAll('i');
 
-            if (page == '<<') {
-                alert("<<");
-                res *= 1;
-                res -= 1;
+
+        //searchSubmit.textContent
+        //searchPopup.hide(100);
+        for (let i = 0; i < buttons.length; i++)
+        {
+            place_arrows(buttons[i]);
+        }
+        for (let i = 0; i < buttons.length; i++)
+        {
+            buttons[i].addEventListener("click", function () { change_Filter_Image(buttons[i]) });
+        }
+        for (let i = 0; i < searchPopup.length; i++)
+        {
+            searchPopup[i].addEventListener("click", function () { show_search_fields(searchPopup[i]) });
+        }
+            //searchPopup.addEventListener("click", show_search_fields);
+            //searchSubmit.addEventListener("click", search_people);
+        });
+        function show_search_fields(butt) {
+            var popup = butt.nextSibling.nextSibling;
+
+            if (typeof popup !== 'undefined') {
+                if (popup.classList.contains('show')) {
+        popup.classList.remove("show");
+                    //document.querySelector("[name ='Префикс']");
+                }
+                else {
+        popup.classList.toggle('show');
+                }
             }
-            else if (page == ">>") {
-                alert(">>");
-                res *= 1;
-                res += 1;
+        }
+
+        function change_Filter_Image(sort_btn) {
+
+            //alert(sort_btn.nextSibling.textContent);
+            var sortOrder = sort_btn.nextSibling.textContent.includes('Префикс')? "@ViewBag.TitleSort" :
+                    sort_btn.nextSibling.textContent.includes('Фамилия') ? "@ViewBag.LnameSort" :
+                sort_btn.nextSibling.textContent.includes('Имя') ? "@ViewBag.FnameSort" :
+                        "@ViewBag.Date";
+
+            var dateFiltY = "@ViewBag.CurrYearFilt" === "" ? null : Number("@ViewBag.CurrYearFilt");
+            var dateFiltM = "@ViewBag.CurrMonthfilt" === "" ? null : Number("@ViewBag.CurrMonthfilt");
+            var dateFiltD = "@ViewBag.CurrDayfilt" === "" ? null : Number("@ViewBag.CurrDayfilt");
+            var currFilter = "@ViewBag.CurrentFilter" === "" ? null : ("@ViewBag.CurrentFilter").toString();
+
+            var MyAppUrlSettings = {
+        MyUsefulUrl: '@Url.Action("Index","Home")'
             }
-            else
-                res = page;
-            alert(typeof(res));
+
             $.ajax({
-                url: "nextPage",
-                method: "POST",
+                url: MyAppUrlSettings.MyUsefulUrl,
+                type: "POST",
                 data: {
-                    "page": res
+                    "CurrentFilter": currFilter,
+                    "sortOrder": sortOrder,
+                    "y": dateFiltY,
+                    "m": dateFiltM,
+                    "d": dateFiltD
                 },
-                success: function (result) {
-                    alert("success");
-                    $("tbody").html(result);
+                success: function (data) {
+                    $("#all").html(data);
                 }
             });
         }
-    </script>
+        function search_people() {
+            var searchForm= document.getElementsByName("search");
+            var searchElem = document.getElementsByName("title");
+
+            searchForm.action = "SearchByName";
+
+        }
+
+        function place_arrows(sort_btn) {
+            var field = sort_btn.nextSibling.textContent;
+            var titleFilt = "@ViewBag.CurrentSort";
+
+            if (field.includes("Префикс") && "@ViewBag.CurrentSort".startsWith("T")) {
+                if ("@ViewBag.CurrentSort".includes("Asc")) {
+        sort_btn.setAttribute("class", "fas fa-angle-down btn btn-default");
+                }
+                else
+                    sort_btn.setAttribute("class", "fas fa-angle-up btn btn-default");
+            }
+            else if (field.includes("Фамилия") && "@ViewBag.CurrentSort".startsWith("L")) {
+                if ("@ViewBag.CurrentSort".includes("Asc"))
+                    sort_btn.setAttribute("class", "fas fa-angle-down btn btn-default");
+                else
+                    sort_btn.setAttribute("class", "fas fa-angle-up btn btn-default");
+            }
+            else if (field.includes("Имя") && "@ViewBag.CurrentSort".startsWith("F")) {
+                if ("@ViewBag.CurrentSort".includes("Asc"))
+                    sort_btn.setAttribute("class", "fas fa-angle-down btn btn-default");
+                else
+                    sort_btn.setAttribute("class", "fas fa-angle-up btn btn-default");
+            }
+            else if (field.includes("Дата") && ("@ViewBag.CurrentSort".startsWith("D"))) {
+                if ("@ViewBag.CurrentSort".includes("Asc"))
+                    sort_btn.setAttribute("class", "fas fa-angle-up btn btn-default");
+                else
+                    sort_btn.setAttribute("class", "fas fa-angle-down btn btn-default");
+            }
+            else {
+            }
+           }
+            </script>
     }
