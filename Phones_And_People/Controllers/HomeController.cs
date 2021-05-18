@@ -85,7 +85,7 @@ namespace Phones_And_People.Controllers
                                                    orderby p.DoB.Month
                                                   select p.DoB.Month).Distinct());
             dateViewModel.Days = new SelectList((from p in people
-                                                 orderby p.DoB.Month
+                                                 orderby p.DoB.Day
                                                 select p.DoB.Day).Distinct());
 
             pvm = MakeViewModel(people, dateViewModel, page);
